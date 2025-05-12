@@ -1,0 +1,17 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.vs/
+
+# Visual Studio
+.vscode/
+
+# SQLite database
+*.db
+*.db-journal
+
+# Node/Angular (quando adicionar o frontend)
+ClientApp/node_modules/
+dist/
