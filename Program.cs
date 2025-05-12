@@ -1,17 +1,20 @@
+
+using AuthApi.Data;
+using Microsoft.EntityFrameworkCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Adiciona o contexto do banco de dados com SQLite
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=users.db"));
 
+// Adiciona os controllers (Web API)
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
+// Usa os endpoints de controller
 app.MapControllers();
 
 app.Run();
