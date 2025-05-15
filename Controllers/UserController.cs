@@ -3,6 +3,7 @@ using AuthApi.DTO;
 using AuthApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using AuthApi.Services;
 
 namespace AuthApi.Controllers
 {
@@ -18,7 +19,7 @@ namespace AuthApi.Controllers
         {
             _context = context;
         }
-
+        /// Método para registrar um novo usuário
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserDto dto)
         {
@@ -38,6 +39,26 @@ namespace AuthApi.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Usuário registrado com sucesso.");
+        }
+
+        /// Método para obter o usuário autenticado
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginUserDto dto, [FromServices] JwtService jwtService)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Username == dto.Username);
+            if (user == null)
+            {
+                return Unauthorized("Usuário inválido.");
+            }
+
+            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
+            if (result == PasswordVerificationResult.Failed)
+            {
+                return Unauthorized("Senha incorreta.");
+            }
+
+            var token = jwtService.GenerateToken(user);
+            return Ok(new { token });
         }
     }
 }
