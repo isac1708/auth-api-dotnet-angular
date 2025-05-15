@@ -17,13 +17,13 @@ namespace AuthApi.Services
 
         public string GenerateToken(User user)
         {
-            var  key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));// esta linha faz a codificação da chave
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));// esta linha faz a codificação da chave
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256); // esta linha cria as credenciais de assinatura
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Username), // esta linha cria a reivindicação do nome de usuário
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // esta linha cria uma nova reivindicação de ID
+              new Claim(ClaimTypes.Name, user.Username),
+              new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             var token = new JwtSecurityToken(

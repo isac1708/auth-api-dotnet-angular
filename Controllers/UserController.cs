@@ -4,6 +4,7 @@ using AuthApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using AuthApi.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AuthApi.Controllers
 {
@@ -59,6 +60,14 @@ namespace AuthApi.Controllers
 
             var token = jwtService.GenerateToken(user);
             return Ok(new { token });
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public IActionResult GetMe()
+        {
+            var username = User.Identity?.Name;
+            return Ok(new { message = $"Você está autenticado como {username}" });
         }
     }
 }
