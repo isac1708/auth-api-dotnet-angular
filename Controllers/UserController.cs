@@ -31,7 +31,7 @@ namespace AuthApi.Controllers
             {
                 Username = dto.Username
             };
-            user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
+            user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);// cria o hash da senha
 
             // Salva no banco
             _context.Users.Add(user);
